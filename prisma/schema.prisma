@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
 }
 
 datasource db {
@@ -11,7 +12,7 @@ datasource db {
 }
 
 model Medic {
-  id            String    @id @default(uuid())
+  id            String    @id @default(uuid()) @db.Uuid
   name          String    @db.VarChar(100)
   crm           String    @db.VarChar(13)
   specialty     String    @db.VarChar(100)
@@ -23,7 +24,7 @@ model Medic {
 }
 
 model Patient {
-  id            String    @id @default(uuid())
+  id            String    @id @default(uuid()) @db.Uuid
   name          String    @db.VarChar(100)
   cpf           String    @db.VarChar(11)
   age           Int       
@@ -42,12 +43,12 @@ enum Gender {
 }
 
 model Appointment {
-  id              String    @id @default(uuid())
+  id              String    @id @default(uuid()) @db.Uuid
   when            DateTime
   isCacelled      Boolean   @default(false)
 
-  patientId       String
-  medicId         String
+  patientId       String    @db.Uuid
+  medicId         String    @db.Uuid
 
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt

@@ -1,9 +1,10 @@
 import { Controller, Get, Post, Body, Query } from '@nestjs/common';
 import { PatientsService } from './patients.service';
 import { CreatePatientDto } from './dto/create-patient.dto';
-import { ApiQuery } from '@nestjs/swagger';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { SearchPatientDto } from './dto/search-patient.dto';
 
+@ApiTags('Patients')
 @Controller('patients')
 export class PatientsController {
   constructor(private readonly patientsService: PatientsService) {}

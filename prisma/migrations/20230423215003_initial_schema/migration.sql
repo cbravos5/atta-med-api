@@ -3,9 +3,10 @@ CREATE TYPE "Gender" AS ENUM ('MALE', 'FEMALE', 'OTHER');
 
 -- CreateTable
 CREATE TABLE "Medic" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL,
     "name" VARCHAR(100) NOT NULL,
     "crm" VARCHAR(13) NOT NULL,
+    "specialty" VARCHAR(100) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -14,7 +15,7 @@ CREATE TABLE "Medic" (
 
 -- CreateTable
 CREATE TABLE "Patient" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL,
     "name" VARCHAR(100) NOT NULL,
     "cpf" VARCHAR(11) NOT NULL,
     "age" INTEGER NOT NULL,
@@ -27,11 +28,11 @@ CREATE TABLE "Patient" (
 
 -- CreateTable
 CREATE TABLE "Appointment" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL,
     "when" TIMESTAMP(3) NOT NULL,
     "isCacelled" BOOLEAN NOT NULL DEFAULT false,
-    "patientId" TEXT NOT NULL,
-    "medicId" TEXT NOT NULL,
+    "patientId" UUID NOT NULL,
+    "medicId" UUID NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
