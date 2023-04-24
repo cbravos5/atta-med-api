@@ -20,12 +20,13 @@ export class MedicsService {
   }
 
   async search(request: SearchMedicDto) {
-    return await this.prisma.$queryRaw<Medic[]>`
-      SELECT * FROM "Medic"
-      WHERE "name" LIKE '%' || ${request.searchText} || '%'
-          OR "crm" LIKE '%' || ${request.searchText} || '%'
-      ORDER BY "name" ASC
-      LIMIT 10;
-    `;
+    return await this.prisma.medic.findMany({
+      where: {
+        OR: [
+          { name: { contains: request.searchText } },
+          { crm: { contains: request.searchText } },
+        ],
+      },
+    });
   }
 }

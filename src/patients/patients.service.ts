@@ -20,12 +20,13 @@ export class PatientsService {
   }
 
   async search(request: SearchPatientDto) {
-    return await this.prisma.$queryRaw<Patient[]>`
-      SELECT * FROM "Patient"
-      WHERE "name" LIKE '%' || ${request.searchText} || '%'
-          OR "cpf" LIKE '%' || ${request.searchText} || '%'
-      ORDER BY "name" ASC
-      LIMIT 10;
-    `;
+    return await this.prisma.patient.findMany({
+      where: {
+        OR: [
+          { name: { contains: request.searchText } },
+          { cpf: { contains: request.searchText } },
+        ]
+      }
+    })
   }
 }

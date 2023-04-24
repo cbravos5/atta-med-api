@@ -45,7 +45,7 @@ enum Gender {
 model Appointment {
   id              String    @id @default(uuid()) @db.Uuid
   when            DateTime
-  isCacelled      Boolean   @default(false)
+  isCancelled      Boolean   @default(false)
 
   patientId       String    @db.Uuid
   medicId         String    @db.Uuid
