@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   HttpException,
   HttpStatus,
   Injectable,
@@ -7,13 +8,28 @@ import {
 import dayjs from 'dayjs';
 import { PrismaService } from 'src/repository/prisma.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
+import { GetAvailableHoursDto } from './dto/get-available-hours-dto';
 
 @Injectable()
 export class AppointmentsService {
   constructor(private prisma: PrismaService) {}
 
   async create(createAppointmentDto: CreateAppointmentDto) {
-    // appointments are expected to be in 30min periods
+    // appointments are expected to be in time periods
+    const validAppointmentHours = this.generatePeriods(
+      createAppointmentDto.when,
+    );
+
+    if (
+      !validAppointmentHours.find(
+        (date) =>
+          date.toISOString() === createAppointmentDto.when.toISOString(),
+      )
+    )
+      throw new BadRequestException(
+        'Provided datetime is not a valid appointment time',
+      );
+
     const existsAppointment = await this.prisma.appointment.findFirst({
       where: {
         when: createAppointmentDto.when,
@@ -23,9 +39,8 @@ export class AppointmentsService {
     });
 
     if (existsAppointment)
-      throw new HttpException(
+      throw new ConflictException(
         'Medic already have and appointment at this date',
-        HttpStatus.CONFLICT,
       );
 
     const medic = await this.prisma.medic.findFirst({
@@ -56,6 +71,78 @@ export class AppointmentsService {
   }
 
   async cancel(id: string) {
-    await this.prisma.appointment.update({ where: { id: id }, data: { isCancelled: true } });
+    await this.prisma.appointment.update({
+      where: { id: id },
+      data: { isCancelled: true },
+    });
+  }
+
+  async getAvailableHours(getAvailableHoursDto: GetAvailableHoursDto) {
+    const periods = this.generatePeriods(getAvailableHoursDto.when);
+
+    const startPeriod = dayjs(getAvailableHoursDto.when)
+      .startOf('day')
+      .toDate();
+    const endperiod = dayjs(getAvailableHoursDto.when).endOf('day').toDate();
+
+    const todayAppointments = await this.prisma.appointment.findMany({
+      where: {
+        when: { gte: startPeriod, lte: endperiod },
+        medicId: getAvailableHoursDto.medicId,
+        isCancelled: false,
+      },
+    });
+
+    return {
+      availablePeriods: periods.filter(
+        (period) =>
+          !todayAppointments.find(
+            ({ when }) => when.toISOString() === period.toISOString(),
+          ),
+      ),
+    };
+  }
+
+  private generatePeriods(date: Date) {
+    const { startTime, endTime, periodMinutes } = this.getTimePeriod();
+
+    const startDateTime = dayjs(date)
+      .startOf('day')
+      .add(startTime.hour, 'hours')
+      .add(startTime.minutes, 'minutes');
+
+    const endDatetime = dayjs(date)
+      .startOf('day')
+      .add(endTime.hour, 'hours')
+      .add(endTime.minutes, 'minutes');
+
+    const appointmentPeriods: Date[] = [];
+    let currentDateTime = startDateTime;
+
+    while (currentDateTime.isBefore(endDatetime)) {
+      appointmentPeriods.push(currentDateTime.toDate());
+
+      currentDateTime = currentDateTime.add(periodMinutes, 'minutes');
+    }
+
+    return appointmentPeriods;
+  }
+
+  private getTimePeriod() {
+    const startHourString = '06:00'.split(':');
+    const endHoursString = '22:00'.split(':');
+    const periodMinutes = Number('30') || 30;
+
+    const startTime = {
+      hour: Number(startHourString[0]) || 6,
+      minutes: Number(startHourString[1] || 0),
+    };
+
+    const endTime = {
+      hour: Number(endHoursString[0]) || 6,
+      minutes: Number(endHoursString[1] || 0),
+    };
+
+    return { startTime, endTime, periodMinutes };
   }
 }

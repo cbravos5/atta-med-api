@@ -1,9 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { AppointmentsService } from './appointments.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { GetApppointmentsDto } from './dto/get-appointments.dto';
-import { UpdateAppointmentDto } from './dto/update-appointment.dto';
+import { GetAvailableHoursDto } from './dto/get-available-hours-dto';
 
 @ApiTags('Appointments')
 @Controller('appointments')
@@ -24,5 +24,10 @@ export class AppointmentsController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.appointmentsService.cancel(id)
+  }
+
+  @Get('available')
+  getAvailable(@Query() request: GetAvailableHoursDto) {
+    return this.appointmentsService.getAvailableHours(request);
   }
 }
