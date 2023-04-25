@@ -7,14 +7,10 @@ import { JwtAuthGuard } from './auth/guards/jwt.guard';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.enableCors();
+
   //#region Pipes
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
-  //#endregion
-
-  //#region Guards
-
-  app.useGlobalGuards(new JwtAuthGuard());
-
   //#endregion
 
   //#region Swagger
@@ -29,7 +25,7 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
   //#endregion
 
-  await app.listen(3000);
+  await app.listen(process.env.PORT || 3001);
 }
 
 bootstrap();

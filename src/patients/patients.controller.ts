@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Query, UseGuards, HttpCode } from '@nestjs/common';
 import { PatientsService } from './patients.service';
 import { CreatePatientDto } from './dto/create-patient.dto';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
@@ -7,11 +7,13 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 
 @ApiTags('Patients')
 @ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @Controller('patients')
 export class PatientsController {
   constructor(private readonly patientsService: PatientsService) {}
 
   @Post()
+  @HttpCode(200)
   create(@Body() request: CreatePatientDto) {
     return this.patientsService.create(request);
   }

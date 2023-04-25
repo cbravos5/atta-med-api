@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, HttpCode } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -8,11 +8,13 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 
 @ApiTags('Users')
 @ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
+  @HttpCode(200)
   @Roles('ADMIN')
   @UseGuards(RolesGuard)
   create(@Body() createUserDto: CreateUserDto) {
@@ -20,6 +22,7 @@ export class UsersController {
   }
 
   @Get()
+  @HttpCode(200)
   @Roles('ADMIN')
   @UseGuards(RolesGuard)
   findAll() {
@@ -27,6 +30,7 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @HttpCode(200)
   @Roles('ADMIN')
   @UseGuards(RolesGuard)
   remove(@Param('id') id: string) {
