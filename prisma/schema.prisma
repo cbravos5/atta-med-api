@@ -56,3 +56,20 @@ model Appointment {
   patient         Patient   @relation(fields: [patientId], references: [id])
   medic           Medic     @relation(fields: [medicId], references: [id])
 }
+
+model User {
+  id              String    @id @default(uuid()) @db.Uuid
+
+  email           String    @unique
+  password        String    @db.VarChar(100)
+
+  role            Role      @default(DEFAULT)
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+enum Role {
+  ADMIN
+  DEFAULT
+}
