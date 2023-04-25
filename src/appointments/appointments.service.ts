@@ -40,7 +40,7 @@ export class AppointmentsService {
 
     if (existsAppointment)
       throw new ConflictException(
-        'Medic already have and appointment at this date',
+        'Medic already have an appointment at this date',
       );
 
     const medic = await this.prisma.medic.findFirst({

@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { ConflictException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Patient } from '@prisma/client';
 import { PrismaService } from 'src/repository/prisma.service';
 import { CreatePatientDto } from './dto/create-patient.dto';
@@ -14,7 +14,7 @@ export class PatientsService {
     });
 
     if (patientExists)
-      throw new HttpException('Patient already exists', HttpStatus.BAD_REQUEST);
+      throw new ConflictException('Patient already exists');
 
     return await this.prisma.patient.create({ data: createPatientDto });
   }
