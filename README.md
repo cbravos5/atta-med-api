@@ -1,73 +1,86 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Summary
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+- [About](#about)
+- [Quick Start](#start)
+- [Built using](#built_using)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+# About <a id="about"></a>
 
-## Description
+This project is an API built with NestJs and Prisma, that simulates a fictional medical clinic appointment management system named AttaMed.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+# Quick Start <a id="start"></a>
 
-## Installation
-
+## Clone the repository:
 ```bash
-$ yarn install
+git clone https://github.com/cbravos5/atta-med-api.git
+```
+or
+```bash
+git clone git@github.com:cbravos5/atta-med-api.git
 ```
 
-## Running the app
-
+## CD into reposory folder and install the app packages:
 ```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+npm install
+```
+or
+```bash
+yarn
 ```
 
-## Test
+## Start the PostgreSQL container
 
+This project uses a PostgreSQL container as DB.
+
+To create the container just run:
 ```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+docker compose up -d
 ```
 
-## Support
+*If you dont have Docker or Docker Compose intalled, follow the instructions in [here](https://docs.docker.com/get-docker/) to install.*
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Once the container is up and running, the PostgreSQL could be accessed through the mapped port 5432.
 
-## Stay in touch
+## Set the enviroment variables:
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Create a **.env** file according to the example in **.env.example**
 
-## License
+## Run migrations
 
-Nest is [MIT licensed](LICENSE).
+```bash
+npm run migration:run
+```
+or
+```bash
+yarn migration:run
+```
+## Start the app in development mode:
+```bash
+npm run start:dev
+```
+or
+```bash
+yarn start:dev
+```
+
+## Usage
+The default app URL is http://localhost:3001.
+
+Access http://localhost:3001/api and find out all the routes with the Swagger page.
+
+The default user registered in the API is:
+
+```
+email: email@attamed.com
+senha: attamed123
+```
+
+Login and have fun exploring the app :)
+
+## Built using <a id="built_using"></a>
+
+- [NestJs](https://nestjs.com/) - Framework
+- [Typescript](https://www.typescriptlang.org/) - Main language
+- [Prisma](https://www.prisma.io/) - ORM
+- [PostgreSQL](https://www.postgresql.org/) - Database
+- [Docker | Docker Compose](https://www.docker.com/) - Containerization
