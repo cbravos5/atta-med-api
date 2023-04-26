@@ -45,14 +45,14 @@ Once the container is up and running, the PostgreSQL could be accessed through t
 
 Create a **.env** file according to the example in **.env.example**
 
-## Run migrations
+## Run migrations and seed
 
 ```bash
-npm run migration:run
+npm run migration:run && npm run seed
 ```
 or
 ```bash
-yarn migration:run
+yarn migration:run && yarn seed 
 ```
 ## Start the app in development mode:
 ```bash
