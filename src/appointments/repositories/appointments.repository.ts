@@ -6,7 +6,7 @@ import { CreateAppointmentDto } from '../dto/create-appointment.dto';
 export class AppointmentsRepository {
   constructor(private prisma: PrismaService) {}
 
-  async findOne(when: Date, medicId: string) {
+  async findByDateAndMedic(when: Date, medicId: string) {
     return await this.prisma.appointment.findFirst({
       where: {
         when,

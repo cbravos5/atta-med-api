@@ -36,7 +36,7 @@ export class AppointmentsService {
         'Provided datetime is not a valid appointment time',
       );
 
-    const existsAppointment = await this.appointmentsRepository.findOne(
+    const existsAppointment = await this.appointmentsRepository.findByDateAndMedic(
       createAppointmentDto.when,
       createAppointmentDto.medicId,
     );
@@ -122,9 +122,9 @@ export class AppointmentsService {
   }
 
   private getTimePeriod() {
-    const startHourString = '06:00'.split(':');
-    const endHoursString = '22:00'.split(':');
-    const periodMinutes = Number('30') || 30;
+    const startHourString = process.env.START_HOUR_STRING || '06:00'.split(':');
+    const endHoursString = process.env.END_HOUR_STRING || '22:00'.split(':');
+    const periodMinutes = 30;
 
     const startTime = {
       hour: Number(startHourString[0]) || 6,

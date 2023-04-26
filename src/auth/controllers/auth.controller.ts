@@ -1,9 +1,9 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode } from '@nestjs/common';
-import { UsersService } from '../users/services/users.service';
-import { CreateUserDto } from '../users/dto/create-user.dto';
+import { UsersService } from '../../users/services/users.service';
+import { CreateUserDto } from '../../users/dto/create-user.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { AuthService } from './auth.service';
-import { LoginRequestDto } from './dto/login-request-dto';
+import { AuthService } from '../services/auth.service';
+import { LoginRequestDto } from '../dto/login-request-dto';
 
 @ApiTags('Auth')
 @Controller('auth')

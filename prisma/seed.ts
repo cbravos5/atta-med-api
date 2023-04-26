@@ -23,6 +23,7 @@ async function main() {
       cpf: '48201786955',
       age: 24,
       name: 'Gabriel Ryan José Assis',
+      gender: 'MALE'
     },
   });
 

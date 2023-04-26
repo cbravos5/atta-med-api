@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from 'src/repository/prisma.service';
-import { MedicsController } from './controllers/medics.controller';
-import { MedicsRepository } from './repositories/medics.repository';
-import { MedicsService } from './services/medics.service';
+import { MedicsController } from './medics.controller';
+import { MedicsRepository } from '../repositories/medics.repository';
+import { MedicsService } from '../services/medics.service';
 
 describe('MedicsController', () => {
   let controller: MedicsController;

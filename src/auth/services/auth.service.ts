@@ -7,18 +7,18 @@ import {
 } from '@nestjs/common';
 import { verify } from 'argon2';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from 'src/repository/prisma.service';
-import { LoginRequestDto } from './dto/login-request-dto';
+import { LoginRequestDto } from '../dto/login-request-dto';
+import { UsersRepository } from 'src/users/repositories/users.repository';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly prisma: PrismaService,
+    private readonly usersRepository: UsersRepository,
     private readonly jwtService: JwtService,
   ) {}
 
   async signIn(request: LoginRequestDto) {
-    const user = await this.prisma.user.findFirst({ where: { email: request.email } });
+    const user = await this.usersRepository.findByEmail(request.email);
 
     if (!user) 
       throw new UnauthorizedException('Wrong email/password.');
