@@ -122,8 +122,8 @@ export class AppointmentsService {
   }
 
   private getTimePeriod() {
-    const startHourString = process.env.START_HOUR_STRING || '06:00'.split(':');
-    const endHoursString = process.env.END_HOUR_STRING || '22:00'.split(':');
+    const startHourString = (process.env.START_HOUR_STRING || '06:00').split(':');
+    const endHoursString = (process.env.END_HOUR_STRING || '22:00').split(':');
     const periodMinutes = 30;
 
     const startTime = {
