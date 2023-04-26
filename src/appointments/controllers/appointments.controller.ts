@@ -1,10 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UsePipes, ValidationPipe, UseGuards, HttpCode } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Query, UseGuards, HttpCode } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
-import { AppointmentsService } from './appointments.service';
-import { CreateAppointmentDto } from './dto/create-appointment.dto';
-import { GetApppointmentsDto } from './dto/get-appointments.dto';
-import { GetAvailableHoursDto } from './dto/get-available-hours-dto';
+import { CreateAppointmentDto } from '../dto/create-appointment.dto';
+import { GetApppointmentsDto } from '../dto/get-appointments.dto';
+import { GetAvailableHoursDto } from '../dto/get-available-hours-dto';
+import { AppointmentsService } from '../services/appointments.service';
 
 @ApiTags('Appointments')
 @ApiBearerAuth()

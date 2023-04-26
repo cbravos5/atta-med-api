@@ -1,9 +1,9 @@
 import { Body, Controller, Get, HttpCode, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
-import { CreateMedicDto } from './dto/create-medic.dto';
-import { SearchMedicDto } from './dto/search-medic.dto';
-import { MedicsService } from './medics.service';
+import { CreateMedicDto } from '../dto/create-medic.dto';
+import { SearchMedicDto } from '../dto/search-medic.dto';
+import { MedicsService } from '../services/medics.service';
 
 @ApiTags('Medics')
 @ApiBearerAuth()

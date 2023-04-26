@@ -6,13 +6,19 @@ import {
   Injectable,
 } from '@nestjs/common';
 import dayjs from 'dayjs';
-import { PrismaService } from 'src/repository/prisma.service';
-import { CreateAppointmentDto } from './dto/create-appointment.dto';
-import { GetAvailableHoursDto } from './dto/get-available-hours-dto';
+import { MedicsRepository } from 'src/medics/repositories/medics.repository';
+import { PatientsRepository } from 'src/patients/repositories/patients.repository';
+import { CreateAppointmentDto } from '../dto/create-appointment.dto';
+import { GetAvailableHoursDto } from '../dto/get-available-hours-dto';
+import { AppointmentsRepository } from '../repositories/appointments.repository';
 
 @Injectable()
 export class AppointmentsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private appointmentsRepository: AppointmentsRepository,
+    private medicsRepository: MedicsRepository,
+    private patientsRepository: PatientsRepository,
+  ) {}
 
   async create(createAppointmentDto: CreateAppointmentDto) {
     // appointments are expected to be in time periods
@@ -30,51 +36,40 @@ export class AppointmentsService {
         'Provided datetime is not a valid appointment time',
       );
 
-    const existsAppointment = await this.prisma.appointment.findFirst({
-      where: {
-        when: createAppointmentDto.when,
-        medicId: createAppointmentDto.medicId,
-        isCancelled: false,
-      },
-    });
+    const existsAppointment = await this.appointmentsRepository.findOne(
+      createAppointmentDto.when,
+      createAppointmentDto.medicId,
+    );
 
     if (existsAppointment)
       throw new ConflictException(
         'Medic already have an appointment at this date',
       );
 
-    const medic = await this.prisma.medic.findFirst({
-      where: { id: createAppointmentDto.medicId },
-    });
+    const medic = await this.medicsRepository.findOne(
+      createAppointmentDto.medicId,
+    );
 
     if (!medic) throw new BadRequestException('Medic not found');
 
-    const patient = await this.prisma.patient.findFirst({
-      where: { id: createAppointmentDto.patientId },
-    });
+    const patient = await this.patientsRepository.findOne(
+      createAppointmentDto.patientId,
+    );
 
     if (!patient) throw new BadRequestException('Patient not found');
 
-    return await this.prisma.appointment.create({
-      data: createAppointmentDto,
-    });
+    return await this.appointmentsRepository.create(createAppointmentDto);
   }
 
   async findByDate(when: Date = new Date()) {
     const startPeriod = dayjs(when).startOf('day').toDate();
-    const endperiod = dayjs(when).endOf('day').toDate();
+    const endPeriod = dayjs(when).endOf('day').toDate();
 
-    return this.prisma.appointment.findMany({
-      where: { when: { gte: startPeriod, lte: endperiod } },
-      include: { medic: true, patient: true },
-    });
+    return this.appointmentsRepository.findByDate(startPeriod, endPeriod);
   }
 
   async cancel(id: string) {
-    await this.prisma.appointment.update({
-      where: { id: id },
-      data: { isCancelled: true },
-    });
+    await this.appointmentsRepository.setToCancelled(id);
   }
 
   async getAvailableHours(getAvailableHoursDto: GetAvailableHoursDto) {
@@ -83,15 +78,13 @@ export class AppointmentsService {
     const startPeriod = dayjs(getAvailableHoursDto.when)
       .startOf('day')
       .toDate();
-    const endperiod = dayjs(getAvailableHoursDto.when).endOf('day').toDate();
+    const endPeriod = dayjs(getAvailableHoursDto.when).endOf('day').toDate();
 
-    const todayAppointments = await this.prisma.appointment.findMany({
-      where: {
-        when: { gte: startPeriod, lte: endperiod },
-        medicId: getAvailableHoursDto.medicId,
-        isCancelled: false,
-      },
-    });
+    const todayAppointments = await this.appointmentsRepository.findByMedic(
+      startPeriod,
+      endPeriod,
+      getAvailableHoursDto.medicId,
+    );
 
     return {
       availablePeriods: periods.filter(

@@ -14,7 +14,7 @@ datasource db {
 model Medic {
   id            String    @id @default(uuid()) @db.Uuid
   name          String    @db.VarChar(100)
-  crm           String    @db.VarChar(13)
+  crm           String    @db.VarChar(13) @unique
   specialty     String    @db.VarChar(100)
 
   createdAt     DateTime  @default(now())
@@ -26,7 +26,7 @@ model Medic {
 model Patient {
   id            String    @id @default(uuid()) @db.Uuid
   name          String    @db.VarChar(100)
-  cpf           String    @db.VarChar(11)
+  cpf           String    @db.VarChar(11) @unique
   age           Int       
   gender        Gender    @default(OTHER)
 

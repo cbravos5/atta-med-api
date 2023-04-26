@@ -1,8 +1,8 @@
 import { Controller, Get, Post, Body, Query, UseGuards, HttpCode } from '@nestjs/common';
-import { PatientsService } from './patients.service';
-import { CreatePatientDto } from './dto/create-patient.dto';
+import { PatientsService } from '../services/patients.service';
+import { CreatePatientDto } from '../dto/create-patient.dto';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { SearchPatientDto } from './dto/search-patient.dto';
+import { SearchPatientDto } from '../dto/search-patient.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 
 @ApiTags('Patients')
