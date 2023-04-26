@@ -45,6 +45,17 @@ Once the container is up and running, the PostgreSQL could be accessed through t
 
 Create a **.env** file according to the example in **.env.example**
 
+## Run tests
+
+Run the tests to make sure everything is fine
+```bash
+npm run test
+```
+or
+```bash
+yarn test 
+```
+
 ## Run migrations and seed
 
 ```bash
